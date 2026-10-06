@@ -1,0 +1,60 @@
+name: Deploy static site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Assemble production site
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp index.html cadastro.html projetos.html service-worker.js dist/
+          cp -R css js dist/
+          mkdir -p dist/imagens
+          cp imagens/*.webp dist/imagens/
+          touch dist/.nojekyll
+          npx --yes esbuild@0.25.5 css/style.css --minify --outfile=dist/css/style.css
+          npx --yes esbuild@0.25.5 js/app.js js/templates/projects.js js/templates/volunteer.js js/modules/storage.js js/modules/validation.js js/modules/volunteer-form.js --outbase=js --outdir=dist/js --minify --target=es2022
+          npx --yes esbuild@0.25.5 service-worker.js --minify --outfile=dist/service-worker.js --target=es2022
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

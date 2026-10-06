@@ -1,0 +1,17 @@
+# Build artifacts
+/dist/
+/coverage/
+
+# Local dependencies and environment
+/node_modules/
+.env
+.env.*
+!.env.example
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
