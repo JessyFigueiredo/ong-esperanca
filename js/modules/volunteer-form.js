@@ -6,7 +6,7 @@ import {
   formatPhone,
   validateVolunteerForm,
 } from "./validation.js";
-import { successTemplate } from "../templates.js";
+import { successTemplate } from "../templates/volunteer.js";
 
 function readVolunteer(form) {
   const data = new FormData(form);

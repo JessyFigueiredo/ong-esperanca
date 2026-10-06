@@ -1,18 +1,25 @@
-const CACHE_NAME = "ong-esperanca-shell-v5";
+const CACHE_NAME = "ong-esperanca-shell-v7";
 const APP_FILES = [
   "index.html",
   "cadastro.html",
   "projetos.html",
   "css/style.css",
   "js/app.js",
-  "js/templates.js",
+  "js/templates/projects.js",
+  "js/templates/volunteer.js",
   "js/modules/storage.js",
   "js/modules/validation.js",
   "js/modules/volunteer-form.js",
-  "imagens/Img1.jpg",
-  "imagens/Img2.jpg",
-  "imagens/Img3.jpg",
-  "imagens/Img4.jpg",
+  "imagens/Img1.webp",
+  "imagens/Img1-400.webp",
+  "imagens/Img1-768.webp",
+  "imagens/Img2.webp",
+  "imagens/Img2-400.webp",
+  "imagens/Img3.webp",
+  "imagens/Img3-400.webp",
+  "imagens/Img3-768.webp",
+  "imagens/Img4.webp",
+  "imagens/Img4-400.webp",
 ];
 
 const appUrl = (file) => new URL(file, self.registration.scope).href;

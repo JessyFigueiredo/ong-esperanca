@@ -1,26 +1,25 @@
-import { bindVolunteerForm } from "./modules/volunteer-form.js";
-import { homeTemplate, projectsTemplate, volunteerTemplate } from "./templates.js";
-
 const routes = {
   inicio: {
     title: "ONG Esperança | Cuidado que transforma",
     description: "Conheça a ONG Esperança e participe de iniciativas que transformam a comunidade.",
-    render: homeTemplate,
+    render: async () => main.innerHTML,
   },
   projetos: {
     title: "Nossos projetos | ONG Esperança",
     description: "Conheça as iniciativas solidárias da ONG Esperança e descubra como participar.",
-    render: projectsTemplate,
+    render: async () => (await import("./templates/projects.js")).projectsTemplate,
   },
   cadastro: {
     title: "Seja voluntário | ONG Esperança",
     description: "Cadastre-se para colaborar como voluntário com a ONG Esperança.",
-    render: volunteerTemplate,
+    render: async () => (await import("./templates/volunteer.js")).volunteerTemplate,
   },
 };
 
 const main = document.getElementById("conteudo");
 const description = document.querySelector('meta[name="description"]');
+const routeContent = new Map([["inicio", main.innerHTML]]);
+let renderSequence = 0;
 
 function currentRoute() {
   const routeName = window.location.hash.slice(1).replace(/^\/+/, "") || "inicio";
@@ -33,11 +32,11 @@ function currentRoute() {
   return routeName;
 }
 
-function renderRoute(shouldFocusMain = true) {
+async function renderRoute(shouldFocusMain = true) {
+  const sequence = ++renderSequence;
   const routeName = currentRoute();
   const route = routes[routeName];
 
-  main.innerHTML = route.render;
   document.title = route.title;
   description.content = route.description;
 
@@ -52,7 +51,34 @@ function renderRoute(shouldFocusMain = true) {
     }
   });
 
-  bindVolunteerForm(main);
+  try {
+    const content = routeContent.has(routeName)
+      ? routeContent.get(routeName)
+      : await route.render();
+    if (sequence !== renderSequence) {
+      return;
+    }
+
+    routeContent.set(routeName, content);
+    if (main.innerHTML !== content) {
+      main.innerHTML = content;
+    }
+
+    if (routeName === "cadastro") {
+      const { bindVolunteerForm } = await import("./modules/volunteer-form.js");
+      if (sequence !== renderSequence) {
+        return;
+      }
+      bindVolunteerForm(main);
+    }
+  } catch (error) {
+    console.error(`Não foi possível carregar a página "${routeName}".`, error);
+    if (sequence === renderSequence) {
+      main.innerHTML = "<p role=\"alert\">Não foi possível carregar esta página. Tente novamente.</p>";
+    }
+    return;
+  }
+
   document.querySelectorAll("[data-current-year]").forEach((element) => {
     element.textContent = String(new Date().getFullYear());
   });

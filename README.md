@@ -7,7 +7,7 @@ Site estático de apresentação da ONG Esperança, com navegação SPA por hash
 - `index.html`: shell da aplicação e ponto de entrada.
 - `css/style.css`: estilos responsivos e estados de acessibilidade.
 - `js/app.js`: roteamento e inicialização.
-- `js/templates.js`: templates HTML das rotas.
+- `js/templates/`: templates das rotas de projetos e cadastro, carregados sob demanda; a página inicial estática fica em `index.html`.
 - `js/modules/validation.js`: formatação e validação dos campos.
 - `js/modules/volunteer-form.js`: interação e feedback do formulário.
 - `js/modules/storage.js`: persistência local no navegador.
@@ -24,7 +24,7 @@ O formulário é uma demonstração client-side. Os cadastros são gravados no `
 
 ## Acessibilidade
 
-O projeto inclui idioma declarado, landmarks semânticos, link para pular ao conteúdo, navegação por teclado, rótulos e mensagens associadas aos campos, foco visível e suporte a `prefers-reduced-motion`. As cores de texto foram ajustadas para atingir a razão mínima WCAG AA de 4,5:1 nos fundos principais. Consulte [`docs/ACCESSIBILITY.md`](./docs/ACCESSIBILITY.md) para os contrastes verificados e a lista de auditorias manuais ainda necessárias; não se declara conformidade WCAG integral sem essas validações.
+O projeto aplica boas práticas baseadas nas WCAG 2.2 AA, incluindo idioma e landmarks semânticos, link para saltar ao conteúdo, navegação por teclado, rótulos e erros associados aos campos, foco visível, alvos interativos ampliados e suporte a `prefers-reduced-motion`. As cores de texto foram verificadas para contraste nos principais fundos. Consulte [`docs/ACCESSIBILITY.md`](./docs/ACCESSIBILITY.md) para os detalhes, ferramentas e verificações manuais pendentes. Isso não constitui declaração de conformidade WCAG completa.
 
 ## Versionamento Git
 
@@ -43,6 +43,6 @@ O deploy publica um protótipo estático, não um serviço de recebimento de ins
 
 ## Otimização e verificação
 
-O workflow de deploy monta o site em `dist/` e minifica CSS, módulos JavaScript e Service Worker com esbuild 0.25.5; o HTML, as imagens JPG referenciadas e os caminhos dos módulos são preservados. Arquivos locais não usados e metadados do Git ficam fora do artefato. As imagens de conteúdo têm dimensões declaradas e as imagens dos projetos são carregadas sob demanda. Antes de cada release, faça auditoria visual e funcional e confira o tamanho dos recursos e o desempenho em dispositivos móveis.
+O workflow de deploy monta o site em `dist/` e minifica CSS, módulos JavaScript e Service Worker com esbuild 0.25.5; preserva o HTML e a estrutura dos módulos. As fotografias são servidas em WebP com variantes `srcset`/`sizes`; o navegador escolhe a resolução adequada à viewport, a imagem principal é priorizada e as imagens dos projetos são carregadas sob demanda. Templates das rotas e o código do formulário são carregados sob demanda. Os JPEG originais permanecem no repositório, mas não são copiados para o artefato de produção. Antes de cada release, faça auditoria visual e funcional e confira o tamanho dos recursos e o desempenho em dispositivos móveis.
 
-O carregamento das fontes externas usa conexões antecipadas (`preconnect`) e `display=swap`. Se o provedor de fontes estiver indisponível, a pilha de fontes alternativas do sistema mantém o conteúdo utilizável.
+O carregamento das fontes externas usa `preconnect`, stylesheet não bloqueante e `display=swap`. Se o provedor de fontes estiver indisponível, a pilha de fontes alternativas do sistema mantém o conteúdo utilizável.

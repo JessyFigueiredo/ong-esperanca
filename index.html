@@ -7,9 +7,16 @@
   <meta name="description" content="Conheça a ONG Esperança e participe de iniciativas que transformam a comunidade.">
   <meta name="theme-color" content="#e2eee3">
   <title>ONG Esperança | Cuidado que transforma</title>
+  <link rel="preload" as="image" href="imagens/Img1-768.webp" imagesrcset="imagens/Img1-400.webp 400w, imagens/Img1-768.webp 768w, imagens/Img1.webp 1536w"
+    imagesizes="(max-width: 768px) calc(100vw - 30px), (max-width: 1200px) 50vw, 550px" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+  </noscript>
   <link rel="stylesheet" href="css/style.css">
   <script type="module" src="js/app.js"></script>
 </head>
@@ -35,7 +42,66 @@
     </div>
   </header>
 
-  <main id="conteudo" tabindex="-1"></main>
+  <main id="conteudo" tabindex="-1">
+    <section class="hero container">
+      <div class="hero-copy">
+        <p class="eyebrow">Cuidado que transforma</p>
+        <h1>ONG Esperança</h1>
+        <p class="hero-lead">
+          Acreditamos que toda pessoa merece oportunidades para viver com dignidade.
+          Por isso, nossas prioridades são o cuidado com famílias em situação de
+          vulnerabilidade, a educação e o fortalecimento da nossa comunidade.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#/projetos">Conheça nossas iniciativas</a>
+          <a class="text-link" href="#/cadastro">Quero ajudar <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <figure class="hero-figure">
+        <img src="imagens/Img1.webp"
+          srcset="imagens/Img1-400.webp 400w, imagens/Img1-768.webp 768w, imagens/Img1.webp 1536w"
+          sizes="(max-width: 768px) calc(100vw - 30px), (max-width: 1200px) 50vw, 550px"
+          alt="Voluntários da ONG Esperança realizando uma atividade comunitária"
+          width="1536" height="1024" fetchpriority="high" decoding="async">
+        <figcaption>Juntos, construímos caminhos de esperança para toda a comunidade.</figcaption>
+      </figure>
+    </section>
+
+    <section class="purpose-section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">O que nos move</p>
+          <h2>Propósitos que viram ação</h2>
+          <p>Trabalhamos lado a lado com as pessoas, respeitando suas histórias e construindo soluções que podem durar.</p>
+        </div>
+        <div class="purpose-grid">
+          <article class="purpose-card">
+            <span class="card-number" aria-hidden="true">01</span>
+            <h3>Acolher com dignidade</h3>
+            <p>Oferecer apoio e itens essenciais a pessoas e famílias que precisam de uma rede de cuidado.</p>
+          </article>
+          <article class="purpose-card">
+            <span class="card-number" aria-hidden="true">02</span>
+            <h3>Ampliar oportunidades</h3>
+            <p>Promover educação, convivência e acesso a experiências que abrem novas possibilidades.</p>
+          </article>
+          <article class="purpose-card">
+            <span class="card-number" aria-hidden="true">03</span>
+            <h3>Fortalecer a comunidade</h3>
+            <p>Unir moradores, voluntários e parceiros em iniciativas solidárias e sustentáveis.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-callout container">
+      <div>
+        <p class="eyebrow">Faça parte</p>
+        <h2>Uma atitude solidária pode abrir muitos caminhos.</h2>
+      </div>
+      <a class="button button-light" href="#/cadastro">Cadastre-se como voluntário</a>
+    </section>
+  </main>
 
   <footer class="site-footer">
 
