@@ -1,0 +1,40 @@
+name: Validate site
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in js/app.js js/templates.js js/modules/storage.js js/modules/validation.js js/modules/volunteer-form.js; do
+            node --check --input-type=module < "$file"
+          done
+          node --check service-worker.js
+
+      - name: Check required production files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in index.html cadastro.html projetos.html service-worker.js css/style.css js/app.js js/templates.js js/modules/storage.js js/modules/validation.js js/modules/volunteer-form.js imagens/Img1.jpg imagens/Img2.jpg imagens/Img3.jpg imagens/Img4.jpg; do
+            test -f "$file"
+          done
