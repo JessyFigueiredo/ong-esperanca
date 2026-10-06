@@ -1,4 +1,4 @@
-const CACHE_NAME = "ong-esperanca-shell-v3";
+const CACHE_NAME = "ong-esperanca-shell-v5";
 const APP_FILES = [
   "index.html",
   "cadastro.html",
@@ -46,27 +46,30 @@ self.addEventListener("fetch", (event) => {
 
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
+      (async () => {
+        try {
+          const response = await fetch(event.request);
           if (response.ok) {
-            const responseCopy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(appUrl("index.html"), responseCopy));
+            const cache = await caches.open(CACHE_NAME);
+            await cache.put(appUrl("index.html"), response.clone());
           }
           return response;
-        })
-        .catch(async () => {
-          const cachedPage = await caches.match(appUrl("index.html"));
+        } catch (error) {
+          const cache = await caches.open(CACHE_NAME);
+          const cachedPage = await cache.match(appUrl("index.html"));
           if (cachedPage) {
             return cachedPage;
           }
-          throw new Error("A página ainda não foi armazenada para uso offline.");
-        })
+          throw error;
+        }
+      })()
     );
     return;
   }
 
   event.respondWith(
-    caches.match(event.request)
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.match(event.request))
       .then((cachedResponse) => cachedResponse || fetch(event.request))
   );
 });

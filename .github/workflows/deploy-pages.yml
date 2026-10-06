@@ -21,6 +21,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
@@ -31,6 +36,9 @@ jobs:
           cp index.html cadastro.html projetos.html service-worker.js dist/
           cp -R css js imagens dist/
           touch dist/.nojekyll
+          npx --yes esbuild@0.25.5 css/style.css --minify --outfile=dist/css/style.css
+          npx --yes esbuild@0.25.5 js/app.js js/templates.js js/modules/storage.js js/modules/validation.js js/modules/volunteer-form.js --outbase=js --outdir=dist/js --minify --target=es2022
+          npx --yes esbuild@0.25.5 service-worker.js --minify --outfile=dist/service-worker.js --target=es2022
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

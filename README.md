@@ -73,7 +73,7 @@ Substitua o endereço de exemplo pela URL real do repositório. Depois de config
 
 ## Publicação no GitHub Pages
 
-O workflow `.github/workflows/validate.yml` verifica a sintaxe JavaScript e os arquivos de produção em pushes para `main`/`develop` e em pull requests para essas branches. O workflow `.github/workflows/deploy-pages.yml` prepara uma cópia enxuta do site em `dist/` e publica apenas em pushes ou execuções manuais na branch `main`. Para ativar o deploy:
+O workflow `.github/workflows/validate.yml` verifica sintaxe JavaScript, valida os documentos HTML com html-validate e monta o artefato de produção em pushes para `main`/`develop` e em pull requests para essas branches. O workflow `.github/workflows/deploy-pages.yml` prepara uma cópia enxuta do site em `dist/` e publica apenas em pushes ou execuções manuais na branch `main`. Para ativar o deploy:
 
 1. Crie um repositório GitHub, configure-o como `origin` conforme as instruções de versionamento e envie a branch `main`.
 2. Em **Settings → Pages**, selecione **GitHub Actions** como fonte de publicação.
@@ -83,4 +83,6 @@ O deploy publica um protótipo estático, não um serviço de recebimento de ins
 
 ## Otimização e verificação
 
-O artefato de deploy inclui apenas os HTML de entrada/redirecionamento, CSS, JavaScript, imagens JPG referenciadas e o Service Worker; arquivos locais não usados e metadados do Git ficam fora do `dist/`. Não há etapa de minificação, pois não existe bundler configurado. Faça auditoria visual, funcional, de acessibilidade e de tamanho de imagens antes de cada release.
+O workflow de deploy monta o site em `dist/` e minifica CSS, módulos JavaScript e Service Worker com esbuild 0.25.5; o HTML, as imagens JPG referenciadas e os caminhos dos módulos são preservados. Arquivos locais não usados e metadados do Git ficam fora do artefato. As imagens de conteúdo têm dimensões declaradas e as imagens dos projetos são carregadas sob demanda. Antes de cada release, faça auditoria visual e funcional e confira o tamanho dos recursos e o desempenho em dispositivos móveis.
+
+O carregamento das fontes externas usa conexões antecipadas (`preconnect`) e `display=swap`. Se o provedor de fontes estiver indisponível, a pilha de fontes alternativas do sistema mantém o conteúdo utilizável.

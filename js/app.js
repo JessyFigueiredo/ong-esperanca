@@ -33,7 +33,7 @@ function currentRoute() {
   return routeName;
 }
 
-function renderRoute() {
+function renderRoute(shouldFocusMain = true) {
   const routeName = currentRoute();
   const route = routes[routeName];
 
@@ -58,11 +58,13 @@ function renderRoute() {
   });
 
   window.scrollTo(0, 0);
-  main.focus({ preventScroll: true });
+  if (shouldFocusMain) {
+    main.focus({ preventScroll: true });
+  }
 }
 
-window.addEventListener("hashchange", renderRoute);
-renderRoute();
+window.addEventListener("hashchange", () => renderRoute());
+renderRoute(false);
 
 if ("serviceWorker" in navigator && window.isSecureContext) {
   navigator.serviceWorker.register("./service-worker.js")

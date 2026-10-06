@@ -31,10 +31,28 @@ jobs:
           done
           node --check service-worker.js
 
+      - name: Validate HTML entry documents
+        run: npx --yes html-validate@11.16.2 index.html cadastro.html projetos.html
+
       - name: Check required production files
         shell: bash
         run: |
           set -euo pipefail
           for file in index.html cadastro.html projetos.html service-worker.js css/style.css js/app.js js/templates.js js/modules/storage.js js/modules/validation.js js/modules/volunteer-form.js imagens/Img1.jpg imagens/Img2.jpg imagens/Img3.jpg imagens/Img4.jpg; do
+            test -f "$file"
+          done
+
+      - name: Build and verify production artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp index.html cadastro.html projetos.html service-worker.js dist/
+          cp -R css js imagens dist/
+          touch dist/.nojekyll
+          npx --yes esbuild@0.25.5 css/style.css --minify --outfile=dist/css/style.css
+          npx --yes esbuild@0.25.5 js/app.js js/templates.js js/modules/storage.js js/modules/validation.js js/modules/volunteer-form.js --outbase=js --outdir=dist/js --minify --target=es2022
+          npx --yes esbuild@0.25.5 service-worker.js --minify --outfile=dist/service-worker.js --target=es2022
+          for file in dist/index.html dist/cadastro.html dist/projetos.html dist/service-worker.js dist/css/style.css dist/js/app.js dist/js/templates.js dist/js/modules/storage.js dist/js/modules/validation.js dist/js/modules/volunteer-form.js dist/imagens/Img1.jpg dist/imagens/Img2.jpg dist/imagens/Img3.jpg dist/imagens/Img4.jpg dist/.nojekyll; do
             test -f "$file"
           done

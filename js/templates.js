@@ -15,7 +15,7 @@ export const homeTemplate = `
     </div>
     <figure class="hero-figure">
       <img src="imagens/Img1.jpg" alt="Voluntários da ONG Esperança realizando uma atividade comunitária"
-        width="720" height="520">
+      width="720" height="520" fetchpriority="high" decoding="async">
       <figcaption>Juntos, construímos caminhos de esperança para toda a comunidade.</figcaption>
     </figure>
   </section>
@@ -68,7 +68,7 @@ export const projectsTemplate = `
   <section class="container project-list" aria-label="Iniciativas solidárias">
     <article class="project-card">
       <img src="imagens/Img2.jpg" alt="Ação de arrecadação e distribuição de alimentos"
-        width="600" height="420" loading="lazy">
+        width="600" height="420" loading="lazy" decoding="async">
       <div class="project-copy">
         <p class="eyebrow">Cuidado e acolhimento</p>
         <h2>Rede de cuidado</h2>
@@ -79,7 +79,7 @@ export const projectsTemplate = `
     </article>
     <article class="project-card project-card-reverse">
       <img src="imagens/Img3.jpg" alt="Atividade educativa realizada com crianças e jovens"
-        width="600" height="420" loading="lazy">
+        width="600" height="420" loading="lazy" decoding="async">
       <div class="project-copy">
         <p class="eyebrow">Aprender e crescer</p>
         <h2>Espaço de oportunidades</h2>
@@ -90,7 +90,7 @@ export const projectsTemplate = `
     </article>
     <article class="project-card">
       <img src="imagens/Img4.jpg" alt="Voluntários participando de uma ação comunitária"
-        width="600" height="420" loading="lazy">
+        width="600" height="420" loading="lazy" decoding="async">
       <div class="project-copy">
         <p class="eyebrow">Comunidade sustentável</p>
         <h2>Comunidade em ação</h2>
@@ -207,7 +207,8 @@ export const volunteerTemplate = `
         </div>
         <div class="field field-full consent-field">
           <label class="checkbox-label" for="consentimento">
-            <input id="consentimento" name="consentimento" type="checkbox" required>
+            <input id="consentimento" name="consentimento" type="checkbox" required
+              aria-describedby="consentimento-error">
             <span>Concordo que a ONG Esperança entre em contato sobre oportunidades de voluntariado.
               <span aria-hidden="true">*</span></span>
           </label>
