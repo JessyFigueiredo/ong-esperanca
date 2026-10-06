@@ -28,7 +28,7 @@ O projeto inclui idioma declarado, landmarks semânticos, link para pular ao con
 
 ## Versionamento Git
 
-O repositório usa GitFlow. A branch `main` contém versões estáveis e é a única que pode acionar o deploy de produção. `develop` recebe funcionalidades integradas para a próxima versão. Cada `feature/*` parte de `develop` e volta a ela por pull request; branches de feature não publicam diretamente em produção.
+O repositório usa GitFlow. A branch `main` contém a linha estável e é a única que aciona o deploy de produção; `develop` recebe funcionalidades integradas para o próximo lançamento. A feature `feature/gitflow-workflow-docs` já foi integrada e encerrada. Branches `release/*` e `hotfix/*` são criadas apenas quando necessárias.
 
 Fluxo recomendado:
 
@@ -42,7 +42,7 @@ git commit -m "feat: descreva a funcionalidade"
 git push -u origin feature/nome-da-funcionalidade
 
 # Abrir pull request feature/* -> develop; após revisão e aprovação, integrar.
-# O workflow .github/workflows/validate.yml valida sintaxe e arquivos necessários nos PRs.
+# O workflow .github/workflows/validate.yml valida sintaxe e arquivos necessários.
 
 # Preparar versão: partir de develop
 git switch develop
@@ -59,13 +59,23 @@ git push -u origin hotfix/correcao-urgente
 # abrir pull request hotfix/* -> main e integrar a mesma correção em develop
 ```
 
-Não inclua segredos, credenciais, dados pessoais reais ou arquivos de build (`dist/`) no controle de versão. O `.gitignore` cobre saídas de build, dependências locais e arquivos de ambiente. Para um repositório GitHub novo, configure o remoto `origin` e publique `main` e `develop`; as branches de feature devem ser publicadas ao abrir seus pull requests. O deploy manual também é restrito a `main`; executar o workflow em outra branch não publica em produção. Ainda não há remoto configurado.
+Não inclua segredos, credenciais, dados pessoais reais ou arquivos de build (`dist/`) no controle de versão. O `.gitignore` cobre saídas de build, dependências locais e arquivos de ambiente.
+
+Para conectar este repositório local a um repositório GitHub vazio, adicione o endereço fornecido pelo GitHub e publique as branches permanentes:
+
+```powershell
+git remote add origin https://github.com/USUARIO/REPOSITORIO.git
+git push -u origin main
+git push -u origin develop
+```
+
+Substitua o endereço de exemplo pela URL real do repositório. Depois de configurar `origin`, publique branches `feature/*`, `release/*` e `hotfix/*` ao abrir os pull requests correspondentes. Até que `origin` seja configurado e os commits enviados, o histórico existe somente neste computador e nenhum deploy remoto será executado.
 
 ## Publicação no GitHub Pages
 
-O workflow `.github/workflows/validate.yml` verifica a sintaxe JavaScript e os arquivos de produção em pushes para `main`/`develop` e em pull requests para essas branches. O workflow `.github/workflows/deploy-pages.yml` prepara uma cópia enxuta do site em `dist/` e publica somente em pushes ou execuções manuais na branch `main`. Para ativar o deploy:
+O workflow `.github/workflows/validate.yml` verifica a sintaxe JavaScript e os arquivos de produção em pushes para `main`/`develop` e em pull requests para essas branches. O workflow `.github/workflows/deploy-pages.yml` prepara uma cópia enxuta do site em `dist/` e publica apenas em pushes ou execuções manuais na branch `main`. Para ativar o deploy:
 
-1. Crie um repositório GitHub e envie a branch `main`.
+1. Crie um repositório GitHub, configure-o como `origin` conforme as instruções de versionamento e envie a branch `main`.
 2. Em **Settings → Pages**, selecione **GitHub Actions** como fonte de publicação.
 3. Acompanhe o workflow na aba **Actions**; após sucesso, abra a URL informada pelo job de deploy.
 
