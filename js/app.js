@@ -32,11 +32,36 @@ function currentRoute() {
   return routeName;
 }
 
+function setHeroImagePreload(routeName) {
+  const preloadId = "hero-image-preload";
+  const existingPreload = document.getElementById(preloadId);
+
+  if (routeName !== "inicio") {
+    existingPreload?.remove();
+    return;
+  }
+
+  if (existingPreload) {
+    return;
+  }
+
+  const preload = document.createElement("link");
+  preload.id = preloadId;
+  preload.rel = "preload";
+  preload.as = "image";
+  preload.href = "imagens/Img1-768.webp";
+  preload.imageSrcset = "imagens/Img1-400.webp 400w, imagens/Img1-768.webp 768w, imagens/Img1.webp 1536w";
+  preload.imageSizes = "(max-width: 768px) calc(100vw - 30px), (max-width: 1200px) 50vw, 550px";
+  preload.fetchPriority = "high";
+  document.head.append(preload);
+}
+
 async function renderRoute(shouldFocusMain = true) {
   const sequence = ++renderSequence;
   const routeName = currentRoute();
   const route = routes[routeName];
 
+  setHeroImagePreload(routeName);
   document.title = route.title;
   description.content = route.description;
 
