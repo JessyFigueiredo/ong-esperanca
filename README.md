@@ -28,17 +28,37 @@ O projeto inclui idioma declarado, landmarks semânticos, link para pular ao con
 
 ## Versionamento Git
 
-Com Git instalado, os comandos básicos são:
+O repositório usa GitFlow. A branch `main` contém a linha base estável e é a única que aciona o deploy de produção. `develop` recebe funcionalidades integradas para a próxima versão. O trabalho atual de documentação está isolado em `feature/gitflow-workflow-docs`, criada a partir de `develop`.
+
+Fluxo recomendado:
 
 ```powershell
-git init -b main
+# Nova funcionalidade: partir de develop e trabalhar em uma feature
+git switch develop
+git pull origin develop
+git switch -c feature/nome-da-funcionalidade
 git add .
-git commit -m "Initial ONG Esperanca site"
-git remote add origin https://github.com/USUARIO/REPOSITORIO.git
-git push -u origin main
+git commit -m "feat: descreva a funcionalidade"
+git push -u origin feature/nome-da-funcionalidade
+
+# Abrir pull request feature/* -> develop; após revisão e aprovação, integrar.
+
+# Preparar versão: partir de develop
+git switch develop
+git switch -c release/1.0.0
+# validar, corrigir versão/documentação e testar nesta branch
+git push -u origin release/1.0.0
+# abrir pull request release/1.0.0 -> main e, após publicar, integrar também em develop
+
+# Correção urgente: partir de main
+git switch main
+git switch -c hotfix/correcao-urgente
+# corrigir e testar
+git push -u origin hotfix/correcao-urgente
+# abrir pull request hotfix/* -> main e integrar a mesma correção em develop
 ```
 
-Não inclua segredos, credenciais, dados pessoais reais ou arquivos de build (`dist/`) no controle de versão. O `.gitignore` cobre saídas de build, dependências locais e arquivos de ambiente.
+Não inclua segredos, credenciais, dados pessoais reais ou arquivos de build (`dist/`) no controle de versão. O `.gitignore` cobre saídas de build, dependências locais e arquivos de ambiente. Para um repositório GitHub novo, configure o remoto `origin` e publique `main` e `develop`; as branches de feature devem ser publicadas ao abrir seus pull requests. Commits locais já existem, mas ainda não há remoto configurado.
 
 ## Publicação no GitHub Pages
 
